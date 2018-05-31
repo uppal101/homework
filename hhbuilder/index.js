@@ -13,10 +13,6 @@ var smoker = document.getElementsByName('smoker');
 var list = document.getElementsByClassName('household');
 var submit = document.querySelector('button[type="submit"]');
 var server = document.getElementsByClassName('debug');
-var fakeJSON = document.createElement('p');
-fakeJSON.setAttribute('id', 'fakeJSON');
-server[0].appendChild(fakeJSON)
-
 
 add.setAttribute('onClick', 'return addPerson()')
 submit.setAttribute('onClick', 'return serializeJSON()')
@@ -27,7 +23,6 @@ function validateAge() {
      alert("Please enter number for age")
   }
 }
-
 
 function requireRelationship() {
   if(relationship.options[relationship.selectedIndex].text === '---') {
@@ -72,11 +67,9 @@ function removePerson(count) {
 function serializeJSON() {
   server[0].style.display = 'block'
   server[0].style.border = 'none'
-  var p = document.getElementById('fakeJSON')
-
 
   var json = JSON.stringify(list[0].textContent)
-  p.innerText = json
+  server[0].innerText = json
   return false;
 
 }
