@@ -2,71 +2,71 @@
 // Add people to a growing household list
 // Remove a previously added person from the list
 // Display the household list in the HTML as it is modified
-// Serialize the household as JSON upon form submission as a fake trip to the serve
+
 
 let count = 0;
-const add = document.getElementsByClassName('add');
-const age = document.getElementsByName('age');
+const add = document.getElementsByClassName('add')[0];
+const age = document.getElementsByName('age')[0];
 const relationship = document.getElementsByName('rel')[0];
 const smoker = document.getElementsByName('smoker');
 const list = document.getElementsByClassName('household');
+const submit = document.querySelector('button[type="submit"]');
+let validAge;
+let relationshipSelected;
+
+add.setAttribute('onClick', 'return addPerson()')
+submit.setAttribute('onClick', 'return serializeJSON()')
 
 
-// function validateAge() {
-//   age[0].attributes.required = "required";
-//
-//   age[0].addEventListener('blur', function() {
-//     if (!Number.isInteger(age[0].innerHTML)) {
-//       window.alert("Please enter a number")
-//     } else if (age[0].innerHTML <= 0) {
-//       window.alert("Please enter a valid age if newborn enter 1")
-//     }
-//     return true;})
-// }
+
+function validateAge() {
+  if(isNaN(age.value) || age.value <= 0 || age.value > 100) {
+    validAge = false;
+     alert("Please enter number for age")
+  }
+  validAge = true;
+}
+console.log(validAge)
 
 function requireRelationship() {
-  return relationship.attributes.required = 'required';
+  if(relationship.options[relationship.selectedIndex].text === '---') {
+    relationshipSelected = false
+    alert("Please select relationship")
+  }
+  relationshipSelected = true;
 }
 
-
-add[0].setAttribute('onClick', addPerson())
-
 function addPerson() {
-    // validateAge();
-    requireRelationship();
+  validateAge();
+  requireRelationship();
+
+  if (validAge && relationshipSelected) {
     const person = document.createElement('li');
     person.setAttribute('class', 'person')
     person.setAttribute('id', `item${count}`)
-    person.innerText = `Age: ${age[0].value}, Relationship: ${relationship.options[relationship.selectedIndex].text}, Smoker: ${smoker[0].value}`;
-    list[0].appendChild(person);
+    person.appendChild(document.createTextNode(`Age: ${age.value}, Relationship: ${relationship.options[relationship.selectedIndex].text}, Smoker: ${smoker[0].checked}`));
+    list[0].appendChild(person)
     const removeButton = document.createElement('button')
     removeButton.setAttribute('class', 'remove')
-    removeButton.setAttribute('onClick', 'removePerson("'+'item'+count+'")');
+    removeButton.setAttribute('onClick', 'return removePerson("'+'item'+count+'")');
     removeButton.innerText= 'remove'
     person.appendChild(removeButton)
     count++
-    console.log()
-    return person;
+  }
+    return false;
 }
 
 function removePerson(count) {
   const individual = document.getElementById(count)
-    return list[0].removeChild(individual);
-
+  list[0].removeChild(individual);
+  return false;
 }
 
 function serializeJSON() {
-  const submit = document.querySelector('button[type="submit"]');
-
   const server = document.getElementsByClassName('debug');
 
-  submit.addEventListener('onClick', function() {
-    console.log(list[0].textContent)
-    const json = JSON.stringify(list[0].textContent)
-    return server[0].appendChild(json)
-  })
-}
+  const json = JSON.stringify(list[0].textContent)
+  server[0].innerHTML = json
+  return false;
 
-addPerson()
-removePerson()
-serializeJSON()
+}
