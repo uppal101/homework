@@ -2,15 +2,20 @@
 // Add people to a growing household list
 // Remove a previously added person from the list
 // Display the household list in the HTML as it is modified
+// Serialize the household as JSON upon form submission as a fake trip to the server
 
 
-let count = 0;
-const add = document.getElementsByClassName('add')[0];
-const age = document.getElementsByName('age')[0];
-const relationship = document.getElementsByName('rel')[0];
-const smoker = document.getElementsByName('smoker');
-const list = document.getElementsByClassName('household');
-const submit = document.querySelector('button[type="submit"]');
+var count = 0;
+var add = document.getElementsByClassName('add')[0];
+var age = document.getElementsByName('age')[0];
+var relationship = document.getElementsByName('rel')[0];
+var smoker = document.getElementsByName('smoker');
+var list = document.getElementsByClassName('household');
+var submit = document.querySelector('button[type="submit"]');
+var server = document.getElementsByClassName('debug');
+var fakeJSON = document.createElement('p');
+fakeJSON.setAttribute('id', 'fakeJSON');
+server[0].appendChild(fakeJSON)
 
 
 add.setAttribute('onClick', 'return addPerson()')
@@ -35,7 +40,6 @@ function addPerson() {
   requireRelationship();
 
 
-
   if (isNaN(age.value) || age.value <= 0 || age.value > 100 ) {
     return false;
   }
@@ -44,12 +48,12 @@ function addPerson() {
     return false
   }
 
-    const person = document.createElement('li');
+    var person = document.createElement('li');
     person.setAttribute('class', 'person')
     person.setAttribute('id', `item${count}`)
     person.appendChild(document.createTextNode(`Age: ${age.value}, Relationship: ${relationship.options[relationship.selectedIndex].text}, Smoker: ${smoker[0].checked}`));
     list[0].appendChild(person)
-    const removeButton = document.createElement('button')
+    var removeButton = document.createElement('button')
     removeButton.setAttribute('class', 'remove')
     removeButton.setAttribute('onClick', 'return removePerson("'+'item'+count+'")');
     removeButton.innerText= 'remove'
@@ -60,16 +64,19 @@ function addPerson() {
 }
 
 function removePerson(count) {
-  const individual = document.getElementById(count)
+  var individual = document.getElementById(count)
   list[0].removeChild(individual);
   return false;
 }
 
 function serializeJSON() {
-  const server = document.getElementsByClassName('debug');
+  server[0].style.display = 'block'
+  server[0].style.border = 'none'
+  var p = document.getElementById('fakeJSON')
 
-  const json = JSON.stringify(list[0].textContent)
-  server[0].innerHTML = json
+
+  var json = JSON.stringify(list[0].textContent)
+  p.innerText = json
   return false;
 
 }
