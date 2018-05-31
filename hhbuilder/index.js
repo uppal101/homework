@@ -11,36 +11,39 @@ const relationship = document.getElementsByName('rel')[0];
 const smoker = document.getElementsByName('smoker');
 const list = document.getElementsByClassName('household');
 const submit = document.querySelector('button[type="submit"]');
-let validAge;
-let relationshipSelected;
+
 
 add.setAttribute('onClick', 'return addPerson()')
 submit.setAttribute('onClick', 'return serializeJSON()')
 
 
-
 function validateAge() {
   if(isNaN(age.value) || age.value <= 0 || age.value > 100) {
-    validAge = false;
      alert("Please enter number for age")
   }
-  validAge = true;
 }
-console.log(validAge)
+
 
 function requireRelationship() {
   if(relationship.options[relationship.selectedIndex].text === '---') {
-    relationshipSelected = false
     alert("Please select relationship")
   }
-  relationshipSelected = true;
 }
 
 function addPerson() {
   validateAge();
   requireRelationship();
 
-  if (validAge && relationshipSelected) {
+
+
+  if (isNaN(age.value) || age.value <= 0 || age.value > 100 ) {
+    return false;
+  }
+
+  if (relationship.options[relationship.selectedIndex].text === '---') {
+    return false
+  }
+
     const person = document.createElement('li');
     person.setAttribute('class', 'person')
     person.setAttribute('id', `item${count}`)
@@ -52,7 +55,7 @@ function addPerson() {
     removeButton.innerText= 'remove'
     person.appendChild(removeButton)
     count++
-  }
+
     return false;
 }
 
